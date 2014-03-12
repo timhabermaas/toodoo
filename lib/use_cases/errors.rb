@@ -1,0 +1,1 @@
+Unauthorized = Class.new StandardError
