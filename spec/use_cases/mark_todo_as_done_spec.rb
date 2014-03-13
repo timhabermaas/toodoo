@@ -1,4 +1,4 @@
-require_relative "../support/in_memory_database"
+require "gateways/in_memory_database"
 require "use_cases/mark_todo_as_done"
 
 describe MarkTodoAsDone do

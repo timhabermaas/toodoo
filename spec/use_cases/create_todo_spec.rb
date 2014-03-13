@@ -1,6 +1,6 @@
 require "use_cases/create_todo"
 require "entities/todo"
-require_relative "../support/in_memory_database"
+require "gateways/in_memory_database"
 
 describe CreateTodo do
   let(:database) { InMemoryDatabase.new }

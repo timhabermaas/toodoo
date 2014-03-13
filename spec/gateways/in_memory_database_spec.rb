@@ -1,4 +1,4 @@
-require_relative "./in_memory_database"
+require "gateways/in_memory_database"
 require "entities/todo"
 
 describe InMemoryDatabase do

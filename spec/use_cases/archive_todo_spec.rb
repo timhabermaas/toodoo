@@ -1,4 +1,4 @@
-require "support/in_memory_database"
+require "gateways/in_memory_database"
 require "use_cases/create_todo"
 require "use_cases/archive_todo"
 
