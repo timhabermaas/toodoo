@@ -28,9 +28,8 @@ describe ListUnfinishedTodos do
   end
 
   it "returns the unfinished todos" do
-    ListUnfinishedTodos.new(database, user).call do |todos|
-      expect(todos.size).to eq 1
-      expect(todos.first.title).to eq "Tidy up your room"
-    end
+    todos = ListUnfinishedTodos.new(database, user).call
+    expect(todos.size).to eq 1
+    expect(todos.first.title).to eq "Tidy up your room"
   end
 end
