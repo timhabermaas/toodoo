@@ -1,5 +1,6 @@
 require "virtus"
 require "active_model"
+require "entities/todo"
 
 ValidationError = Class.new StandardError
 

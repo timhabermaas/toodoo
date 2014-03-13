@@ -21,6 +21,10 @@ class InMemoryDatabase
     raise RecordNotFound
   end
 
+  def delete(record)
+    map_for_class(record.class).delete record.id
+  end
+
   def all(klass)
     map_for_class(klass).values
   end
