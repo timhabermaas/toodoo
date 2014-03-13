@@ -33,6 +33,10 @@ class InMemoryDatabase
     all(klass).reject(&:done?).select { |t| t.user == user }
   end
 
+  def query_todos_for_user(klass, user_id)
+    all(klass).select { |t| t.user.id == user_id }
+  end
+
   private
     def map_for_class klass
       @map[klass.to_s] ||= {}

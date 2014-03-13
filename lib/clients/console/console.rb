@@ -1,4 +1,5 @@
 require "use_cases/list_unfinished_todos"
+require "use_cases/list_todos"
 require "use_cases/create_todo"
 require "use_cases/mark_todo_as_done"
 require "entities/user"
@@ -7,6 +8,7 @@ require "gateways/in_memory_database"
 require "clients/console/todo_list_printer"
 
 USER = User.new
+USER.id = 32
 DATABASE = InMemoryDatabase.new
 
 loop do
@@ -14,7 +16,7 @@ loop do
   puts "-----------------------"
   puts
   puts "1.) Add a new Todo"
-  puts "2.) List existing Todos"
+  puts "2.) List Todos"
   puts "3.) Mark Todo as done"
   puts "x.) Exit"
   answer = gets.chomp
@@ -27,7 +29,7 @@ loop do
 
     CreateTodo.new(DATABASE, request, USER).call
   when "2"
-    printer = TodoListPrinter.new ListUnfinishedTodos.new(DATABASE, USER).call
+    printer = TodoListPrinter.new ListTodos.new(DATABASE, USER.id, USER).call
     printer.print
   when "3"
     printer = TodoListPrinter.new ListUnfinishedTodos.new(DATABASE, USER).call

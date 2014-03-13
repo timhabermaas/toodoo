@@ -5,8 +5,13 @@ class TodoListPrinter
     end
 
     def print
-      puts "[ ] #{@todo.title} (#{@todo.id})"
+      puts "[#{box_content}] #{@todo.title} (#{@todo.id})"
     end
+
+    private
+      def box_content
+        @todo.done? ? "x" : " "
+      end
   end
 
   def initialize todos
