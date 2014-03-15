@@ -30,7 +30,7 @@ class Toodoo
     ListTodos.new(database, user_id, current_user).call
   end
 
-  def list_unfinished_todos
-    ListUnfinishedTodos.new(database, current_user).call
+  def list_unfinished_todos(user_id)
+    ListUnfinishedTodos.new(database, user_id, current_user).call
   end
 end

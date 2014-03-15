@@ -29,8 +29,8 @@ class InMemoryDatabase
     map_for_class(klass).values
   end
 
-  def query_todo_unfinished_for_user(klass, user)
-    all(klass).reject(&:done?).select { |t| t.user == user }
+  def query_todo_unfinished_for_user(klass, user_id)
+    all(klass).reject(&:done?).select { |t| t.user.id == user_id }
   end
 
   def query_todos_for_user(klass, user_id)

@@ -27,7 +27,7 @@ loop do
     printer = TodoListPrinter.new toodoo.list_todos(USER.id)
     printer.print
   when "3"
-    printer = TodoListPrinter.new toodoo.list_unfinished_todos
+    printer = TodoListPrinter.new toodoo.list_unfinished_todos(USER.id)
     printer.print
 
     puts "Which Todo do you want to mark finished?"

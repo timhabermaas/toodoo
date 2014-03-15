@@ -3,10 +3,7 @@ require "gateways/in_memory_database"
 
 describe ListUnfinishedTodos do
   let(:database) { InMemoryDatabase.new }
-  let(:user) { double }
-
-  def create_todo(task, user)
-  end
+  let(:user) { double(id: 2) }
 
   before do
     # TODO this is actually testing the database layer. Use mocks instead?
@@ -23,12 +20,12 @@ describe ListUnfinishedTodos do
 
     t = Todo.new
     t.title = "Clean the dishes"
-    t.user = double
+    t.user = double(id: 3)
     database.create t
   end
 
   it "returns the unfinished todos" do
-    todos = ListUnfinishedTodos.new(database, user).call
+    todos = ListUnfinishedTodos.new(database, 2, user).call
     expect(todos.size).to eq 1
     expect(todos.first.title).to eq "Tidy up your room"
   end
