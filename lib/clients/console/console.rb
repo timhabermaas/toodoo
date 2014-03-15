@@ -1,15 +1,10 @@
-require "use_cases/list_unfinished_todos"
-require "use_cases/list_todos"
-require "use_cases/create_todo"
-require "use_cases/mark_todo_as_done"
-require "entities/user"
+require "toodoo"
 require "gateways/in_memory_database"
-
 require "clients/console/todo_list_printer"
 
 USER = User.new
 USER.id = 32
-DATABASE = InMemoryDatabase.new
+toodoo = Toodoo.new(InMemoryDatabase.new, USER)
 
 loop do
   puts "Please choose an action"
@@ -27,18 +22,18 @@ loop do
     title = gets.chomp
     request = OpenStruct.new(title: title)
 
-    CreateTodo.new(DATABASE, request, USER).call
+    toodoo.create_todo request
   when "2"
-    printer = TodoListPrinter.new ListTodos.new(DATABASE, USER.id, USER).call
+    printer = TodoListPrinter.new toodoo.list_todos(USER.id)
     printer.print
   when "3"
-    printer = TodoListPrinter.new ListUnfinishedTodos.new(DATABASE, USER).call
+    printer = TodoListPrinter.new toodoo.list_unfinished_todos
     printer.print
 
     puts "Which Todo do you want to mark finished?"
     id = gets.chomp
     if id != "0"
-      MarkTodoAsDone.new(DATABASE, id.to_i, USER).call
+      toodoo.mark_todo_as_done id.to_i
     end
   when "x"
     break
