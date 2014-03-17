@@ -9,7 +9,7 @@ class ListTodos
 
   def call
     authorize!
-    @database.query_todos_for_user Todo, @current_user.id
+    @database.query_todos_for_user Task, @current_user.id
   end
 
   def authorize!

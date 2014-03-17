@@ -1,5 +1,5 @@
 require "use_cases/create_todo"
-require "entities/todo"
+require "entities/task"
 require "gateways/in_memory_database"
 
 describe CreateTodo do
@@ -13,10 +13,10 @@ describe CreateTodo do
     it "saves a Todo to the database" do
       subject.call
 
-      expect(database.all(Todo).size).to eq 1
-      expect(database.all(Todo).first.title).to eq "Blub"
-      expect(database.all(Todo).first.body).to eq "KA"
-      expect(database.all(Todo).first.user).to eq current_user
+      expect(database.all(Task).size).to eq 1
+      expect(database.all(Task).first.title).to eq "Blub"
+      expect(database.all(Task).first.body).to eq "KA"
+      expect(database.all(Task).first.user).to eq current_user
     end
   end
 

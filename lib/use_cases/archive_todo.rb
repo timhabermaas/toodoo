@@ -8,7 +8,7 @@ class ArchiveTodo
   end
 
   def call
-    todo = @database.find(Todo, @todo_id)
+    todo = @database.find(Task, @todo_id)
 
     authorize! todo
 

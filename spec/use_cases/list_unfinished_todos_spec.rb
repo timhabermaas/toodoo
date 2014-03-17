@@ -7,18 +7,17 @@ describe ListUnfinishedTodos do
 
   before do
     # TODO this is actually testing the database layer. Use mocks instead?
-    t = Todo.new
+    t = UnfinishedTask.new
     t.title = "Tidy up your room"
     t.user = user
     database.create t
 
-    t = Todo.new
+    t = UnfinishedTask.new
     t.title = "Clean the dishes"
     t.user = user
-    t.done!
-    database.create t
+    database.create t.done
 
-    t = Todo.new
+    t = UnfinishedTask.new
     t.title = "Clean the dishes"
     t.user = double(id: 3)
     database.create t

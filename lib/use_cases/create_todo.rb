@@ -1,6 +1,6 @@
 require "virtus"
 require "active_model"
-require "entities/todo"
+require "entities/task"
 
 ValidationError = Class.new StandardError
 
@@ -14,7 +14,7 @@ class CreateTodo
   def call
     @request.validate!
 
-    t = Todo.new
+    t = UnfinishedTask.new
     t.title = @request.title
     t.body = @request.body
     t.user = @current_user

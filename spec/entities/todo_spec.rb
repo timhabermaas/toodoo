@@ -1,10 +1,12 @@
-require "entities/todo"
+require "entities/task"
 
-describe Todo do
-  describe "#done!" do
-    it "marks the todo as done" do
-      subject.done!
-      expect(subject.done?).to eq true
+describe Task do
+  describe "#done" do
+    it "returns a CompletedTask" do
+      todo = UnfinishedTask.new(title: "Clean").done
+      expect(todo.title).to eq "Clean"
+      expect(todo.done?).to eq true
+      expect(todo.class).to eq CompletedTask
     end
   end
 end

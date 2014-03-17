@@ -26,11 +26,7 @@ class InMemoryDatabase
   end
 
   def all(klass)
-    map_for_class(klass).values
-  end
-
-  def query_todo_unfinished_for_user(klass, user_id)
-    all(klass).reject(&:done?).select { |t| t.user.id == user_id }
+    map_for_class(klass).values.select { |r| r.is_a? klass }
   end
 
   def query_todos_for_user(klass, user_id)
@@ -39,6 +35,9 @@ class InMemoryDatabase
 
   private
     def map_for_class klass
+      if klass == UnfinishedTask || klass == CompletedTask
+        klass = Task
+      end
       @map[klass.to_s] ||= {}
     end
 end

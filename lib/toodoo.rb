@@ -1,4 +1,4 @@
-require "entities/todo"
+require "entities/task"
 require "entities/user"
 require "use_cases/mark_todo_as_done"
 require "use_cases/create_todo"

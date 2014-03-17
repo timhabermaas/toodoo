@@ -1,6 +1,6 @@
 require "gateways/in_memory_database"
 require "use_cases/list_todos"
-require "entities/todo"
+require "entities/task"
 
 describe ListTodos do
   let(:database) { InMemoryDatabase.new }
@@ -10,7 +10,7 @@ describe ListTodos do
       todos = double
       user = double(id: 2)
 
-      expect(database).to receive(:query_todos_for_user).with(Todo, user.id).and_return todos
+      expect(database).to receive(:query_todos_for_user).with(Task, user.id).and_return todos
       expect(ListTodos.new(database, user.id, user).call).to eq todos
     end
   end

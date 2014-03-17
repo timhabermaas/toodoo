@@ -7,7 +7,7 @@ describe MarkTodoAsDone do
   context "todo exists" do
     before do
       @user = double
-      @todo = Todo.new
+      @todo = UnfinishedTask.new
       @todo.user = @user
       database.create @todo
     end
@@ -17,7 +17,8 @@ describe MarkTodoAsDone do
         subject = MarkTodoAsDone.new(database, @todo.id, @user)
         subject.call
 
-        expect(database.all(Todo).first.done?).to eq true
+        expect(database.all(CompletedTask).size).to eq 1
+        expect(database.all(UnfinishedTask).size).to eq 0
       end
     end
 

@@ -14,7 +14,7 @@ describe ArchiveTodo do
   context "todo belongs to user" do
     it "removes the todo" do
       ArchiveTodo.new(database, @todo.id, user).call
-      expect(database.all(Todo).size).to eq 0
+      expect(database.all(Task).size).to eq 0
     end
   end
 

@@ -1,4 +1,4 @@
-require "entities/todo"
+require "entities/task"
 require "use_cases/errors"
 
 class MarkTodoAsDone
@@ -9,11 +9,10 @@ class MarkTodoAsDone
   end
 
   def call
-    todo = @database.find Todo, @todo_id
+    todo = @database.find UnfinishedTask, @todo_id
     authorize! todo
 
-    todo.done!
-    @database.update todo
+    @database.update todo.done
   end
 
   private
