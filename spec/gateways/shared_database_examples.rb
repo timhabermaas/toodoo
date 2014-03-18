@@ -7,8 +7,7 @@ shared_examples "a database supporting TooDoo" do
 
     it "saves the user" do
       subject.create user
-      expect(subject.all User).to eq [user]
-      expect(user.id).to be_a Integer
+      expect(subject.find(User, user.id)).to eq user
     end
   end
 
@@ -18,14 +17,13 @@ shared_examples "a database supporting TooDoo" do
 
     before do
       subject.create user
-      task.user = subject.all(User).first
+      task.user = user
     end
 
     describe "#create" do
       it "creates the todo" do
         subject.create task
-        expect(subject.all Task).to eq [task]
-        expect(task.id).to be_a Integer
+        expect(subject.find Task, task.id).to eq task
       end
     end
 
@@ -36,7 +34,7 @@ shared_examples "a database supporting TooDoo" do
 
       it "removes the task" do
         subject.delete task
-        expect(subject.all Task).to eq []
+        expect{subject.find Task, task.id}.to raise_error RecordNotFound
       end
     end
 
@@ -48,7 +46,17 @@ shared_examples "a database supporting TooDoo" do
       it "updates the task in place" do
         task.title = "title 2"
         subject.update task
-        expect(subject.all Task).to eq [task]
+        expect(subject.find Task, task.id).to eq task
+      end
+    end
+
+    describe "#find" do
+      before do
+        subject.create task
+      end
+
+      it "fetches the user" do
+        expect(subject.find(Task, task.id).user).to eq user
       end
     end
   end

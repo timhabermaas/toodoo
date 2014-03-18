@@ -6,9 +6,9 @@ describe MarkTodoAsDone do
 
   context "todo exists" do
     before do
-      @user = double
-      @todo = UnfinishedTask.new
-      @todo.user = @user
+      @user = User.new
+      database.create @user
+      @todo = Task.new user: @user
       database.create @todo
     end
 
@@ -17,14 +17,14 @@ describe MarkTodoAsDone do
         subject = MarkTodoAsDone.new(database, @user, @todo.id)
         subject.call
 
-        tasks = database.all(Task)
-        expect(tasks.first.done?).to eq true
+        task = database.find Task, @todo.id
+        expect(task.done?).to eq true
       end
     end
 
     context "todo doesn't belong user" do
       it "throws a Unauthorized exception" do
-        user_2 = double
+        user_2 = User.new id: 4
 
         expect {
           subject = MarkTodoAsDone.new(database, user_2, @todo.id)

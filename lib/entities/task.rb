@@ -9,6 +9,10 @@ class Task
     end
   end
 
+  def ==(other)
+    other.class == self.class && other.id == self.id && other.done? == self.done? && other.title == self.title
+  end
+
   def done
     Task.new title: title, body: body, user: user, id: id, done: true
   end

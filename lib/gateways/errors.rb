@@ -1,0 +1,1 @@
+RecordNotFound = Class.new StandardError

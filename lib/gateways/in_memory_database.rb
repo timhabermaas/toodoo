@@ -1,4 +1,4 @@
-RecordNotFound = Class.new StandardError
+require "gateways/errors"
 
 class InMemoryDatabase
   def initialize
