@@ -2,7 +2,7 @@ require "entities/task"
 require "use_cases/errors"
 
 class ListUnfinishedTodos
-  def initialize(database, user_id, current_user)
+  def initialize(database, current_user, user_id)
     @database = database
     @user_id = user_id
     @current_user = current_user

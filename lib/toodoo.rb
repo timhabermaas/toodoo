@@ -15,22 +15,22 @@ class Toodoo
   end
 
   def archive_todo(todo_id)
-    ArchiveTodo.new(database, todo_id, current_user).call
+    ArchiveTodo.new(database, current_user, todo_id).call
   end
 
   def create_todo(request)
-    CreateTodo.new(database, request, current_user).call
+    CreateTodo.new(database, current_user, request).call
   end
 
   def mark_todo_as_done(todo_id)
-    MarkTodoAsDone.new(database, todo_id, current_user).call
+    MarkTodoAsDone.new(database, current_user, todo_id).call
   end
 
   def list_todos(user_id)
-    ListTodos.new(database, user_id, current_user).call
+    ListTodos.new(database, current_user, user_id).call
   end
 
   def list_unfinished_todos(user_id)
-    ListUnfinishedTodos.new(database, user_id, current_user).call
+    ListUnfinishedTodos.new(database, current_user, user_id).call
   end
 end

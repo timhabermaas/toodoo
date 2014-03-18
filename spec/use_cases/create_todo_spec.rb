@@ -5,7 +5,7 @@ require "gateways/in_memory_database"
 describe CreateTodo do
   let(:database) { InMemoryDatabase.new }
   let(:current_user) { double }
-  subject { CreateTodo.new database, request, current_user }
+  subject { CreateTodo.new database, current_user, request }
 
   context "given valid request" do
     let(:request) { OpenStruct.new title: "Blub", body: "KA" }

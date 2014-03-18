@@ -8,12 +8,12 @@ describe ArchiveTodo do
   let(:user) { double }
 
   before do
-    @todo = CreateTodo.new(database, request, user).call
+    @todo = CreateTodo.new(database, user, request).call
   end
 
   context "todo belongs to user" do
     it "removes the todo" do
-      ArchiveTodo.new(database, @todo.id, user).call
+      ArchiveTodo.new(database, user, @todo.id).call
       expect(database.all(Task).size).to eq 0
     end
   end
@@ -23,7 +23,7 @@ describe ArchiveTodo do
       other_user = double
 
       expect {
-        ArchiveTodo.new(database, @todo.id, other_user).call
+        ArchiveTodo.new(database, other_user, @todo.id).call
       }.to raise_error Unauthorized
     end
   end

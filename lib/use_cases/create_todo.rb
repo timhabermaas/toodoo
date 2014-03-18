@@ -5,7 +5,7 @@ require "entities/task"
 ValidationError = Class.new StandardError
 
 class CreateTodo
-  def initialize(database, request, current_user)
+  def initialize(database, current_user, request)
     @database = database
     @request = request
     @current_user = current_user

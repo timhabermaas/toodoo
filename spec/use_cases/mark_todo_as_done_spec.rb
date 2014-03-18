@@ -14,7 +14,7 @@ describe MarkTodoAsDone do
 
     context "todo belongs to user" do
       it "marks the todo as done" do
-        subject = MarkTodoAsDone.new(database, @todo.id, @user)
+        subject = MarkTodoAsDone.new(database, @user, @todo.id)
         subject.call
 
         expect(database.all(CompletedTask).size).to eq 1
@@ -27,7 +27,7 @@ describe MarkTodoAsDone do
         user_2 = double
 
         expect {
-          subject = MarkTodoAsDone.new(database, @todo.id, user_2)
+          subject = MarkTodoAsDone.new(database, user_2, @todo.id)
           subject.call
         }.to raise_error Unauthorized
       end

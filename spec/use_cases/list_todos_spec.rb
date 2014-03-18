@@ -11,14 +11,14 @@ describe ListTodos do
       user = double(id: 2)
 
       expect(database).to receive(:query_todos_for_user).with(Task, user.id).and_return todos
-      expect(ListTodos.new(database, user.id, user).call).to eq todos
+      expect(ListTodos.new(database, user, user.id).call).to eq todos
     end
   end
 
   context "current user is not the same as user" do
     it "throws Unauthorized exception" do
       expect {
-        ListTodos.new(database, 32, double(id: 2)).call
+        ListTodos.new(database, double(id: 2), 32).call
       }.to raise_error(Unauthorized)
     end
   end

@@ -25,7 +25,7 @@ describe ListUnfinishedTodos do
     end
 
     it "returns the unfinished todos" do
-      todos = ListUnfinishedTodos.new(database, 2, user).call
+      todos = ListUnfinishedTodos.new(database, user, 2).call
       expect(todos.size).to eq 1
       expect(todos.first.title).to eq "Tidy up your room"
     end
@@ -35,7 +35,7 @@ describe ListUnfinishedTodos do
     it "raises an Unauthorized exception" do
       expect {
         current_user = double id: 1
-        ListUnfinishedTodos.new(database, 2, current_user).call
+        ListUnfinishedTodos.new(database, current_user, 2).call
       }.to raise_error(Unauthorized)
     end
   end

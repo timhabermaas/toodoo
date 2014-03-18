@@ -2,7 +2,7 @@ require "entities/task"
 require "use_cases/errors"
 
 class MarkTodoAsDone
-  def initialize(database, todo_id, current_user)
+  def initialize(database, current_user, todo_id)
     @database = database
     @todo_id = todo_id
     @current_user = current_user
