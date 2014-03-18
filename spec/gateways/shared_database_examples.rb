@@ -31,6 +31,20 @@ shared_examples "a database supporting TooDoo" do
     end
   end
 
+  describe "#delete" do
+    let(:task) { UnfinishedTask.new }
+
+    before do
+      subject.create task
+      subject.delete task
+    end
+
+    it "removes the task" do
+      expect(subject.all(UnfinishedTask)).to eq []
+      expect{subject.find(UnfinishedTask, task.id)}.to raise_error RecordNotFound
+    end
+  end
+
   describe "#update" do
     let(:task) { UnfinishedTask.new }
 
