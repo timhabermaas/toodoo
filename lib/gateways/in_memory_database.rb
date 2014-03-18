@@ -16,7 +16,9 @@ class InMemoryDatabase
   end
 
   def find(klass, id)
-    map_for_class(klass).fetch id
+    result = map_for_class(klass).fetch id
+    raise RecordNotFound unless result.is_a? klass
+    result
   rescue KeyError
     raise RecordNotFound
   end
