@@ -11,7 +11,7 @@ class ListUnfinishedTodos
   def call
     authorize!
 
-    @database.query_todos_for_user UnfinishedTask, @user_id
+    @database.query_unfinished_todos_for_user @user_id
   end
 
   private

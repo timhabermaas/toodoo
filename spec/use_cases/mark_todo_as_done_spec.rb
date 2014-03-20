@@ -17,8 +17,8 @@ describe MarkTodoAsDone do
         subject = MarkTodoAsDone.new(database, @user, @todo.id)
         subject.call
 
-        expect(database.all(CompletedTask).size).to eq 1
-        expect(database.all(UnfinishedTask).size).to eq 0
+        tasks = database.all(Task)
+        expect(tasks.first.done?).to eq true
       end
     end
 

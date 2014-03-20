@@ -31,8 +31,12 @@ class InMemoryDatabase
     map_for_class(klass).values.select { |r| r.is_a? klass }
   end
 
-  def query_todos_for_user(klass, user_id)
-    all(klass).select { |t| t.user.id == user_id }
+  def query_todos_for_user(user_id)
+    all(Task).select { |t| t.user.id == user_id }
+  end
+
+  def query_unfinished_todos_for_user(user_id)
+    all(Task).select { |t| t.user.id == user_id && !t.done? }
   end
 
   private

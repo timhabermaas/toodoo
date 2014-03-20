@@ -1,85 +1,95 @@
-require "entities/task"
+require "entities"
 
 shared_examples "a database supporting TooDoo" do
-  describe "#create" do
-    context "UnfinishedTask" do
-      it "saves the object" do
-        t = UnfinishedTask.new
-        subject.create t
-        expect(subject.all UnfinishedTask).to eq [t]
-        expect(subject.all CompletedTask).to eq []
-        expect(subject.all Task).to eq [t]
 
-        expect(subject.find UnfinishedTask, t.id).to eq t
-        expect{subject.find CompletedTask, t.id}.to raise_error RecordNotFound
-        expect(subject.find Task, t.id).to eq t
+  describe "#create user" do
+    let(:user) { User.new(name: "name") }
+
+    it "saves the user" do
+      subject.create user
+      expect(subject.all User).to eq [user]
+      expect(user.id).to be_a Integer
+    end
+  end
+
+  describe "tasks" do
+    let(:task) { Task.new(title: "title", body: "body", done: false) }
+    let(:user) { User.new(name: "name") }
+
+    before do
+      subject.create user
+      task.user = subject.all(User).first
+    end
+
+    describe "#create" do
+      it "creates the todo" do
+        subject.create task
+        expect(subject.all Task).to eq [task]
+        expect(task.id).to be_a Integer
       end
     end
 
-    context "CompletedTask" do
-      it "saves the object" do
-        t = CompletedTask.new
-        subject.create t
-        expect(subject.all CompletedTask).to eq [t]
-        expect(subject.all UnfinishedTask).to eq []
-        expect(subject.all Task).to eq [t]
+    describe "#delete" do
+      before do
+        subject.create task
+      end
 
-        expect(subject.find CompletedTask, t.id).to eq t
-        expect{subject.find UnfinishedTask, t.id}.to raise_error RecordNotFound
-        expect(subject.find Task, t.id).to eq t
+      it "removes the task" do
+        subject.delete task
+        expect(subject.all Task).to eq []
+      end
+    end
+
+    describe "#update" do
+      before do
+        subject.create task
+      end
+
+      it "updates the task in place" do
+        task.title = "title 2"
+        subject.update task
+        expect(subject.all Task).to eq [task]
       end
     end
   end
 
-  describe "#delete" do
-    let(:task) { UnfinishedTask.new }
+  describe "queries" do
+    describe "query_todos_for_user" do
+      let(:user_1) { User.new name: "Peter" }
+      let(:user_2) { User.new name: "Dieter" }
 
-    before do
-      subject.create task
-      subject.delete task
+      before do
+        subject.create user_1
+        subject.create user_2
+        @task = Task.new(title: "bla", user: user_1, done: false)
+
+        subject.create @task
+        subject.create Task.new(title: "blub", user: user_2, done: true)
+      end
+
+      it "finds only the todos for the given user" do
+        expect(subject.query_todos_for_user(user_1.id)).to eq [@task]
+      end
     end
 
-    it "removes the task" do
-      expect(subject.all(UnfinishedTask)).to eq []
-      expect{subject.find(UnfinishedTask, task.id)}.to raise_error RecordNotFound
-    end
-  end
+    describe "query_unfinished_todos_for_user" do
+      let(:user_1) { User.new name: "Peter" }
+      let(:user_2) { User.new name: "Dieter" }
 
-  describe "#update" do
-    let(:task) { UnfinishedTask.new }
+      before do
+        subject.create user_1
+        subject.create user_2
+        @task = Task.new(title: "bla", user: user_1, done: false)
 
-    before do
-      subject.create task
+        subject.create @task
+        subject.create Task.new(title: "blub", user: user_2, done: false)
+        subject.create Task.new(title: "ble", user: user_1, done: true)
+      end
 
-      @finised_task = task.done
-
-      subject.update @finised_task
-    end
-
-    it "overwrites the exisiting task" do
-      expect{subject.find UnfinishedTask, task.id}.to raise_error RecordNotFound
-      expect(subject.find CompletedTask, task.id).to eq @finised_task
-    end
-  end
-
-  describe "#query_todos_for_user" do
-    let(:user_1) { double(:user, id: 1) }
-    let(:user_2) { double(:user, id: 2) }
-
-    let(:task_1) { CompletedTask.new user: user_1 }
-    let(:task_2) { CompletedTask.new user: user_2 }
-    let(:task_3) { UnfinishedTask.new user: user_1 }
-
-    before do
-      subject.create task_1
-      subject.create task_2
-      subject.create task_3
-    end
-
-    it "fetches only the tasks for the given user" do
-      expect(subject.query_todos_for_user(CompletedTask, 1)).to eq [task_1]
-      expect(subject.query_todos_for_user(CompletedTask, 2)).to eq [task_2]
-      expect(subject.query_todos_for_user(UnfinishedTask, 1)).to eq [task_3]
+      it "returns only the unfinished tasks for the given user" do
+        tasks = subject.query_unfinished_todos_for_user user_1.id
+        expect(tasks).to eq [@task]
+      end
     end
   end
 end

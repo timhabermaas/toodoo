@@ -10,7 +10,7 @@ describe ListTodos do
       todos = double
       user = double(id: 2)
 
-      expect(database).to receive(:query_todos_for_user).with(Task, user.id).and_return todos
+      expect(database).to receive(:query_todos_for_user).with(user.id).and_return todos
       expect(ListTodos.new(database, user, user.id).call).to eq todos
     end
   end

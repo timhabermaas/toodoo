@@ -2,11 +2,12 @@ require "entities/task"
 
 describe Task do
   describe "#done" do
-    it "returns a CompletedTask" do
-      todo = UnfinishedTask.new(title: "Clean").done
-      expect(todo.title).to eq "Clean"
-      expect(todo.done?).to eq true
-      expect(todo.class).to eq CompletedTask
+    it "returns a new task which has been marked as done" do
+      task = Task.new(title: "Clean")
+      completed_task = task.done
+      expect(completed_task.title).to eq "Clean"
+      expect(task.done?).to eq false
+      expect(completed_task.done?).to eq true
     end
   end
 end
