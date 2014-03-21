@@ -31,6 +31,12 @@ class InMemoryDatabase
     map_for_class(klass).values.select { |r| r.is_a? klass }
   end
 
+  def query_user_by_name(name)
+    user = all(User).find { |u| u.name == name }
+    raise RecordNotFound unless user
+    user
+  end
+
   def query_todos_for_user(user_id)
     all(Task).select { |t| t.user.id == user_id }
   end

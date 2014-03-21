@@ -54,6 +54,28 @@ shared_examples "a database supporting TooDoo" do
   end
 
   describe "queries" do
+    describe "query_user_by_name" do
+      let(:user_1) { User.new name: "Peter" }
+      let(:user_2) { User.new name: "Dieter" }
+
+      before do
+        subject.create user_1
+        subject.create user_2
+      end
+
+      context "user can be found" do
+        it "returns the user" do
+          expect(subject.query_user_by_name("Peter")).to eq user_1
+        end
+      end
+
+      context "user can not be found" do
+        it "raises RecordNotFound exception" do
+          expect { subject.query_user_by_name("Hans") }.to raise_error(RecordNotFound)
+        end
+      end
+    end
+
     describe "query_todos_for_user" do
       let(:user_1) { User.new name: "Peter" }
       let(:user_2) { User.new name: "Dieter" }

@@ -1,5 +1,5 @@
 class User
-  attr_accessor :name, :id
+  attr_accessor :name, :id, :password
 
   def initialize attributes={}
     attributes.each do |key, value|
