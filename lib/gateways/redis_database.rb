@@ -45,6 +45,11 @@ class RedisDatabase
     end
   end
 
+  def query_user_by_name name
+    user_id = @redis.get "users:names:#{name}"
+    find User, user_id
+  end
+
   def query_unfinished_todos_for_user user_id
     keys = @redis.smembers "users:#{user_id}:tasks:unfinished"
     return [] unless keys
@@ -114,6 +119,7 @@ class RedisDatabase
     def write_user user
       json = {id: user.id, name: user.name}.to_json
       @redis.set "#{key_for(User)}:#{user.id}", json
+      @redis.set "users:names:#{user.name}", user.id
     end
 
     def set_new_id record
