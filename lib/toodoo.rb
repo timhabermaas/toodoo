@@ -11,9 +11,8 @@ require "use_cases/login"
 class Toodoo
   attr_reader :database, :current_user
 
-  def initialize(database, current_user)
+  def initialize(database)
     @database = database
-    @current_user = current_user
   end
 
   def archive_todo(todo_id)

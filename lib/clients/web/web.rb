@@ -8,7 +8,8 @@ require "gateways/in_memory_database"
 database = InMemoryDatabase.new
 user = User.new
 user.id = 2
-toodoo = Toodoo.new(database, user)
+toodoo = Toodoo.new(database)
+toodoo.register_user(OpenStruct.new(name: "peter", password: "peter"))
 
 class CreateTodoForm
   include Virtus.model
@@ -20,7 +21,7 @@ class CreateTodoForm
 end
 
 get "/tasks" do
-  todos = toodoo.list_todos 2
+  todos = toodoo.list_my_todos
   slim :tasks, locals: { tasks: todos }
 end
 

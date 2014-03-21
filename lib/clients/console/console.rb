@@ -2,7 +2,7 @@ require "toodoo"
 require "gateways/in_memory_database"
 require "clients/console/todo_list_printer"
 
-APP = Toodoo.new(InMemoryDatabase.new, nil)
+APP = Toodoo.new(InMemoryDatabase.new)
 
 def menu(*choices)
   puts "Please choose an action"
