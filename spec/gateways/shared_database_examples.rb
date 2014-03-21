@@ -109,16 +109,21 @@ shared_examples "a database supporting TooDoo" do
       before do
         subject.create user_1
         subject.create user_2
-        @task = Task.new(title: "bla", user: user_1, done: false)
+        @task_1 = Task.new(title: "bla", user: user_1, done: false)
+        @task_2 = Task.new(title: "bla", user: user_1, done: false)
 
-        subject.create @task
+        subject.create @task_1
+        subject.create @task_2
         subject.create Task.new(title: "blub", user: user_2, done: false)
         subject.create Task.new(title: "ble", user: user_1, done: true)
+
+        updated_task = @task_2.done
+        subject.update updated_task
       end
 
       it "returns only the unfinished tasks for the given user" do
         tasks = subject.query_unfinished_todos_for_user user_1.id
-        expect(tasks).to eq [@task]
+        expect(tasks).to eq [@task_1]
       end
     end
   end

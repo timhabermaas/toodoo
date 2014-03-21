@@ -107,5 +107,6 @@ class RedisDatabase
       @redis.set "tasks:#{task.id}", json
       @redis.sadd "users:#{task.user.id}:tasks", task.id
       @redis.sadd "users:#{task.user.id}:tasks:unfinished", task.id if !task.done?
+      @redis.srem "users:#{task.user.id}:tasks:unfinished", task.id if task.done?
     end
 end
