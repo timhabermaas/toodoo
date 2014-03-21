@@ -129,7 +129,7 @@ class RedisDatabase
 
     def key_for klass
       return "users" if klass == User
-      return "tasks" if klass == Task || klass == UnfinishedTask || klass == CompletedTask
+      return "tasks" if [Task, UnfinishedTask, CompletedTask].include? klass
       raise "Unknown klass to serialize (tried to serialize #{klass})"
     end
 end
