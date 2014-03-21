@@ -67,27 +67,23 @@ class RedisDatabase
 
   private
     def create_task task
-      id = @redis.incr "tasks:last_id"
-      task.id = id
+      set_new_id task
       write_task task
     end
 
     def create_user user
-      id = @redis.incr "users:last_id"
-      user.id = id
-      json = {id: user.id, name: user.name}.to_json
-      @redis.set "users:#{id}", json
+      set_new_id user
+      write_user user
     end
 
     def find_user id
-      json = @redis.get "users:#{id}"
+      json = @redis.get "#{key_for(User)}:#{id}"
       raise RecordNotFound if json.nil?
-      hash = JSON.parse json
-      User.new hash
+      build_user_from_json json
     end
 
     def find_task id
-      json = @redis.get "tasks:#{id}"
+      json = @redis.get "#{key_for(Task)}:#{id}"
       raise RecordNotFound if json.nil?
       build_task_from_json json
     end
@@ -98,15 +94,36 @@ class RedisDatabase
       Task.new hash
     end
 
+    def build_user_from_json json
+      hash = JSON.parse json
+      User.new hash
+    end
+
     def delete_task id
-      @redis.del "tasks:#{id}"
+      @redis.del "#{key_for(Task)}:#{id}"
     end
 
     def write_task task
       json = {id: task.id, title: task.title, body: task.body, user_id: task.user.id, done: task.done?}.to_json
-      @redis.set "tasks:#{task.id}", json
+      @redis.set "#{key_for(Task)}:#{task.id}", json
       @redis.sadd "users:#{task.user.id}:tasks", task.id
       @redis.sadd "users:#{task.user.id}:tasks:unfinished", task.id if !task.done?
       @redis.srem "users:#{task.user.id}:tasks:unfinished", task.id if task.done?
+    end
+
+    def write_user user
+      json = {id: user.id, name: user.name}.to_json
+      @redis.set "#{key_for(User)}:#{user.id}", json
+    end
+
+    def set_new_id record
+      id = @redis.incr "#{key_for(record.class)}:last_id"
+      record.id = id
+    end
+
+    def key_for klass
+      return "users" if klass == User
+      return "tasks" if klass == Task
+      raise "Unknown klass to serialize"
     end
 end
