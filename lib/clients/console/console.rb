@@ -1,9 +1,11 @@
 require "toodoo"
 require "forms"
-require "gateways/in_memory_database"
+require "gateways/redis_database"
 require "clients/console/todo_list_printer"
 
-APP = Toodoo.new(InMemoryDatabase.new)
+url = "redis://localhost:6379/1"
+database = RedisDatabase.new(url)
+APP = Toodoo.new(database)
 
 def menu(*choices)
   puts "Please choose an action"
