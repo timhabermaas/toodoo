@@ -9,6 +9,6 @@ class User
   end
 
   def == other
-    other.id == self.id && other.name == self.name
+    other.id == self.id && other.name == self.name && other.password == self.password
   end
 end

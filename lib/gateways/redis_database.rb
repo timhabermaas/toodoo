@@ -117,7 +117,7 @@ class RedisDatabase
     end
 
     def write_user user
-      json = {id: user.id, name: user.name}.to_json
+      json = {id: user.id, name: user.name, password: user.password}.to_json
       @redis.set "#{key_for(User)}:#{user.id}", json
       @redis.set "users:names:#{user.name}", user.id
     end
