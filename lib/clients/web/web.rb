@@ -3,13 +3,12 @@ require "slim"
 require "virtus"
 
 require "toodoo"
-require "gateways/in_memory_database"
+require "gateways/redis_database"
 require "forms"
 
-database = InMemoryDatabase.new
-user = User.new
-user.id = 2
-toodoo = Toodoo.new(database)
+url = "redis://localhost:6379/1"
+database = RedisDatabase.new url
+toodoo = Toodoo.new database
 
 get "/" do
   redirect "/login"
