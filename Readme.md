@@ -24,15 +24,15 @@ The authorization rules and the use case currently live together in one class. T
 
 *Entities* are a mixture of [data transfer objects (DTO)](http://en.wikipedia.org/wiki/Data_transfer_object) and [business models](http://martinfowler.com/eaaCatalog/domainModel.html) which support the *use cases* and help communicating the domain model.
 
-###Forms
-
-Form (or request) objects live on the boundary between the outside world and the use cases. They provide ways to validate input and make use cases only operate on valid data. They can also support forms in web applications.
-
 ####Issues
 
 I'm basically creating an [anemic domain model](http://www.martinfowler.com/bliki/AnemicDomainModel.html) since the entites have almost no business logic\*. I'm not sure that's as bad as Martin Fowler makes it sound like. The future will tell.
 
 \* I try to avoid breaking encapsulation by adding methods which operate on the data of the entity. For example I call `task#done` from the `MarkTodoAsDone` instead of `task.done = false`. Another way to see the Entity-UseCase relationship is to think of the entities as the functional core and the use cases as the imperative shell.
+
+###Forms
+
+Form (or request) objects live on the boundary between the outside world and the use cases. They provide ways to validate input and make use cases only operate on valid data. They can also support forms in web applications.
 
 ###Gateways
 
