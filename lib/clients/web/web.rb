@@ -6,7 +6,7 @@ require "toodoo"
 require "gateways/redis_database"
 require "forms"
 
-url = "redis://localhost:6379/1"
+url = ENV["REDISTOGO_URL"] || "redis://localhost:6379/1"
 database = RedisDatabase.new url
 toodoo = Toodoo.new database
 
