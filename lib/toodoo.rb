@@ -15,6 +15,10 @@ class Toodoo
     @database = database
   end
 
+  def logged_in?
+    current_user != nil
+  end
+
   def archive_todo(todo_id)
     ArchiveTodo.new(database, current_user, todo_id).call
   end

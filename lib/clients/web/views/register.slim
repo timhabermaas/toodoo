@@ -1,0 +1,14 @@
+h1 Register User
+
+form action="/register" method="post"
+  p
+    label for="name" Name
+    input type="text" name="register[name]" id="name"
+  p
+    label for="password" Password
+    input type="password" name="register[password]" id="password"
+  p
+    label for="password" Password Confirmation
+    input type="password" name="register[password_confirmation]" id="password-confirmation"
+  p
+    input type="submit" value="Register User"
