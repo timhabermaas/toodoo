@@ -1,5 +1,5 @@
 class Task
-  attr_accessor :title, :body, :user, :id
+  attr_accessor :title, :user, :id
 
   def initialize attributes={}
     @done = false
@@ -14,7 +14,7 @@ class Task
   end
 
   def done
-    Task.new title: title, body: body, user: user, id: id, done: true
+    Task.new title: title, user: user, id: id, done: true
   end
 
   def done?

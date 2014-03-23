@@ -109,7 +109,7 @@ class RedisDatabase
     end
 
     def write_task task
-      json = {id: task.id, title: task.title, body: task.body, user_id: task.user.id, done: task.done?}.to_json
+      json = {id: task.id, title: task.title, user_id: task.user.id, done: task.done?}.to_json
       @redis.set "#{key_for(Task)}:#{task.id}", json
       @redis.sadd "users:#{task.user.id}:tasks", task.id
       @redis.sadd "users:#{task.user.id}:tasks:unfinished", task.id if !task.done?

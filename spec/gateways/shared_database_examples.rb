@@ -12,7 +12,7 @@ shared_examples "a database supporting TooDoo" do
   end
 
   describe "tasks" do
-    let(:task) { Task.new(title: "title", body: "body", done: false) }
+    let(:task) { Task.new(title: "title", done: false) }
     let(:user) { User.new(name: "name") }
 
     before do
