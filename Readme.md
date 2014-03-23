@@ -4,7 +4,7 @@
 
 ##Credits
 
-The code is heavily influenced by Robert C. Martin's [Architecture the Lost Years](https://www.youtube.com/watch?v=WpkDN78P884) talk and a series of blog post from Adam Hawkins titled [Rediscovering the Joy of Desing](http://hawkins.io/2014/01/rediscovering-the-joy-of-design/). Thanks to both of them for their great work!
+The code is heavily influenced by Robert C. Martin's [Architecture the Lost Years](https://www.youtube.com/watch?v=WpkDN78P884) talk and a series of blog posts from Adam Hawkins titled [Rediscovering the Joy of Desing](http://hawkins.io/2014/01/rediscovering-the-joy-of-design/). Thanks to both of them for their great work!
 
 ##Domain
 
