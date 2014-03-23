@@ -120,6 +120,8 @@ class RedisDatabase
     end
 
     def write_user user
+      raise NotUnique if @redis.get "users:names:#{user.name}"
+
       json = {id: user.id, name: user.name, password: user.password}.to_json
       @redis.set "#{key_for(User)}:#{user.id}", json
       @redis.set "users:names:#{user.name}", user.id

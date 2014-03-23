@@ -9,6 +9,13 @@ shared_examples "a database supporting TooDoo" do
       subject.create user
       expect(subject.find(User, user.id)).to eq user
     end
+
+    context "username already exists" do
+      it "throws a NotUnique exception" do
+        subject.create user
+        expect{ subject.create user }.to raise_error(NotUnique)
+      end
+    end
   end
 
   describe "tasks" do

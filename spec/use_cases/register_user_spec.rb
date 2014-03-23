@@ -19,4 +19,8 @@ describe RegisterUser do
       expect(user_in_db.password).to eq "peter"
     end
   end
+
+  context "username already exists" do
+    pending "notify the user without exposing NotUnique exception"
+  end
 end

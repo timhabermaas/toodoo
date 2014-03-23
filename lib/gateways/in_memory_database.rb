@@ -6,6 +6,13 @@ class InMemoryDatabase
   end
 
   def create(record)
+    if record.class == User
+      begin
+        query_user_by_name record.name
+        raise NotUnique
+      rescue RecordNotFound
+      end
+    end
     id = rand 20000
     record.id = id
     map_for_class(record.class)[id] = record
