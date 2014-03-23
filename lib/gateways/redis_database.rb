@@ -52,22 +52,14 @@ class RedisDatabase
 
   def query_unfinished_todos_for_user user_id
     keys = @redis.smembers "users:#{user_id}:tasks:unfinished"
-    return [] unless keys
 
-    keys.map do |key|
-      json = @redis.get "tasks:#{key}"
-      build_task_from_json json
-    end
+    fetch_tasks_from_keys keys
   end
 
   def query_todos_for_user user_id
     keys = @redis.smembers "users:#{user_id}:tasks"
-    return [] unless keys
 
-    keys.map do |key|
-      json = @redis.get "tasks:#{key}"
-      build_task_from_json json
-    end
+    fetch_tasks_from_keys keys
   end
 
   private
@@ -91,6 +83,15 @@ class RedisDatabase
       json = @redis.get "#{key_for(Task)}:#{id}"
       raise RecordNotFound if json.nil?
       build_task_from_json json
+    end
+
+    def fetch_tasks_from_keys keys
+      return [] unless keys
+
+      keys.map do |key|
+        json = @redis.get "tasks:#{key}"
+        build_task_from_json json
+      end
     end
 
     def build_task_from_json json
