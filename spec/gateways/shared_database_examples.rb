@@ -63,17 +63,15 @@ shared_examples "a database supporting TooDoo" do
 
   describe "queries" do
     describe "query_user_by_name" do
-      let(:user_1) { User.new name: "Peter" }
-      let(:user_2) { User.new name: "Dieter" }
+      let(:user) { User.new name: "Peter" }
 
       before do
-        subject.create user_1
-        subject.create user_2
+        subject.create user
       end
 
       context "user can be found" do
         it "returns the user" do
-          expect(subject.query_user_by_name("Peter")).to eq user_1
+          expect(subject.query_user_by_name("Peter")).to eq user
         end
       end
 
