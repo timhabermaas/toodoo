@@ -22,11 +22,3 @@ class CreateTodo
     @database.create t
   end
 end
-
-class CreateTodoForm
-  include Virtus.model
-  include ActiveModel::Validations
-
-  attribute :title, String
-  attribute :body, String
-end
