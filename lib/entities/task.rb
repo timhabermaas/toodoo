@@ -14,7 +14,9 @@ class Task
   end
 
   def done
-    Task.new title: title, user: user, id: id, done: true
+    dup.tap do |t|
+      t.instance_variable_set :@done, true
+    end
   end
 
   def done?
