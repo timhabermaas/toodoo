@@ -16,6 +16,6 @@ class ListUnfinishedTodos
 
   private
     def authorize!
-      raise Unauthorized unless @current_user.id == @user_id
+      raise Unauthorized unless @current_user && @current_user.id == @user_id
     end
 end

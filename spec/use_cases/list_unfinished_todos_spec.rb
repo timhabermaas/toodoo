@@ -39,4 +39,12 @@ describe ListUnfinishedTodos do
       }.to raise_error(Unauthorized)
     end
   end
+
+  context "user not logged in" do
+    it "raises an Unauthorized exception" do
+      expect {
+        ListUnfinishedTodos.new(database, nil, 2).call
+      }.to raise_error(Unauthorized)
+    end
+  end
 end
