@@ -36,7 +36,7 @@ describe Login do
     let(:login_form) { OpenStruct.new(name: "peter", password: "peter") }
 
     it "raises a RecordNotFound exception" do
-      expect { subject.call }.to raise_error(RecordNotFound)
+      expect { subject.call }.to raise_error(NotAuthenticated)
     end
   end
 end

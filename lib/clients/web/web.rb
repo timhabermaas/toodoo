@@ -11,6 +11,10 @@ user = User.new
 user.id = 2
 toodoo = Toodoo.new(database)
 
+get "/" do
+  redirect "/login"
+end
+
 get "/register" do
   slim :register
 end
@@ -22,13 +26,17 @@ post "/register" do
 end
 
 get "/login" do
-  slim :login
+  slim :login, locals: { notice: nil }
 end
 
 post "/login" do
   form = LoginForm.new params[:login]
-  toodoo.login form
-  redirect "/tasks"
+  begin
+    toodoo.login form
+    redirect "/tasks"
+  rescue NotAuthenticated
+    slim :login, locals: { notice: "Wrong username or password." }
+  end
 end
 
 get "/tasks" do
