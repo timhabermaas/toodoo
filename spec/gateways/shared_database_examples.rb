@@ -35,6 +35,8 @@ shared_examples "a database supporting TooDoo" do
       it "removes the task" do
         subject.delete task
         expect{subject.find Task, task.id}.to raise_error RecordNotFound
+        expect(subject.query_todos_for_user(user.id)).to eq []
+        expect(subject.query_unfinished_todos_for_user(user.id)).to eq []
       end
     end
 

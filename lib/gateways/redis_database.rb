@@ -105,7 +105,10 @@ class RedisDatabase
     end
 
     def delete_task id
+      task = find Task, id
       @redis.del "#{key_for(Task)}:#{id}"
+      @redis.srem "users:#{task.user.id}:tasks", id
+      @redis.srem "users:#{task.user.id}:tasks:unfinished", id
     end
 
     def write_task task
