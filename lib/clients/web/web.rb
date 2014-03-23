@@ -4,43 +4,12 @@ require "virtus"
 
 require "toodoo"
 require "gateways/in_memory_database"
+require "forms"
 
 database = InMemoryDatabase.new
 user = User.new
 user.id = 2
 toodoo = Toodoo.new(database)
-
-class CreateTodoForm
-  include Virtus.model
-
-  attribute :title, String
-
-  def validate!
-  end
-end
-
-class LoginForm
-  include Virtus.model
-
-  attribute :name, String
-  attribute :password, String
-
-  def validate!
-    # TODO
-  end
-end
-
-class RegisterUserForm
-  include Virtus.model
-
-  attribute :name, String
-  attribute :password, String
-  attribute :password_confirmation, String
-
-  def validate!
-    # TODO
-  end
-end
 
 get "/register" do
   slim :register
