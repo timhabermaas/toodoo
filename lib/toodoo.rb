@@ -5,6 +5,7 @@ require "use_cases/errors"
 require "use_cases/list_todos"
 require "use_cases/list_unfinished_todos"
 require "use_cases/register_user"
+require "use_cases/archive_todo"
 require "use_cases/login"
 
 class Toodoo

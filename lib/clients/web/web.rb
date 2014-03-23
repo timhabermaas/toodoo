@@ -34,6 +34,10 @@ class TasksPage
       "/tasks/#{task.id}/done"
     end
 
+    def delete_path
+      "/tasks/#{task.id}/delete"
+    end
+
     def show_mark_button?
       !task.done?
     end
@@ -89,6 +93,11 @@ end
 post "/tasks" do
   form = CreateTodoForm.new params[:task]
   toodoo.create_todo form
+  redirect "/tasks"
+end
+
+post "/tasks/:id/delete" do
+  toodoo.archive_todo params[:id].to_i
   redirect "/tasks"
 end
 
