@@ -51,13 +51,13 @@ class RedisDatabase
   end
 
   def query_unfinished_todos_for_user user_id
-    keys = @redis.smembers "users:#{user_id}:tasks:unfinished"
+    keys = members_of "users:#{user_id}:tasks:unfinished"
 
     fetch_tasks_from_keys keys
   end
 
   def query_todos_for_user user_id
-    keys = @redis.smembers "users:#{user_id}:tasks"
+    keys = members_of "users:#{user_id}:tasks"
 
     fetch_tasks_from_keys keys
   end
@@ -86,8 +86,6 @@ class RedisDatabase
     end
 
     def fetch_tasks_from_keys keys
-      return [] unless keys
-
       keys.map do |key|
         json = @redis.get "tasks:#{key}"
         build_task_from_json json
@@ -103,6 +101,10 @@ class RedisDatabase
     def build_user_from_json json
       hash = JSON.parse json
       User.new hash
+    end
+
+    def members_of key
+      @redis.smembers(key) || []
     end
 
     def delete_task id
