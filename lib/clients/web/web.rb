@@ -10,6 +10,48 @@ url = "redis://localhost:6379/1"
 database = RedisDatabase.new url
 toodoo = Toodoo.new database
 
+class TasksPage
+  def initialize(tasks, current_user)
+    @tasks = tasks
+    @current_user = current_user
+  end
+
+  class TaskPresenter < Struct.new(:task)
+    # TODO remove
+    def id
+      task.id
+    end
+
+    def title
+      task.title
+    end
+
+    def marked_symbol
+      task.done? ? "[x]" : "[ ]"
+    end
+
+    def mark_as_done_path
+      "/tasks/#{task.id}/done"
+    end
+
+    def show_mark_button?
+      !task.done?
+    end
+  end
+
+  def tasks
+    @tasks.map { |t| TaskPresenter.new(t) }
+  end
+
+  def logged_in?
+    !current_user.nil?
+  end
+
+  def current_user
+    @current_user
+  end
+end
+
 get "/" do
   redirect "/login"
 end
@@ -40,12 +82,18 @@ end
 
 get "/tasks" do
   todos = toodoo.list_my_todos
-  slim :tasks, locals: { tasks: todos, current_user: toodoo.current_user }
+  tasks_page = TasksPage.new(todos, toodoo.current_user)
+  slim :tasks, locals: { tasks_page: tasks_page }
 end
 
 post "/tasks" do
   form = CreateTodoForm.new params[:task]
   toodoo.create_todo form
+  redirect "/tasks"
+end
+
+post "/tasks/:id/done" do
+  toodoo.mark_todo_as_done(params[:id].to_i)
   redirect "/tasks"
 end
 
