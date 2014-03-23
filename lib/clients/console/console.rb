@@ -1,4 +1,5 @@
 require "toodoo"
+require "forms"
 require "gateways/in_memory_database"
 require "clients/console/todo_list_printer"
 
@@ -20,7 +21,7 @@ def register_form
   name = gets.chomp
   puts "enter your password"
   password = gets.chomp
-  request = OpenStruct.new(name: name, password: password)
+  request = RegisterUserForm.new(name: name, password: password)
   APP.register_user request
 end
 
@@ -29,7 +30,7 @@ def login_form
   name = gets.chomp
   puts "enter your password"
   password = gets.chomp
-  request = OpenStruct.new(name: name, password: password)
+  request = LoginForm.new(name: name, password: password)
   APP.login request
 end
 
@@ -58,7 +59,7 @@ def application_screen
     when "1"
       puts "Please enter the title of the Todo"
       title = gets.chomp
-      request = OpenStruct.new(title: title)
+      request = CreateTodoForm.new(title: title)
 
       APP.create_todo request
     when "2"
