@@ -7,4 +7,8 @@ class User
       instance_variable_set instance_name.to_sym, value
     end
   end
+
+  def == other
+    other.id == self.id && other.name == self.name && other.password == self.password
+  end
 end

@@ -9,7 +9,7 @@ class MarkTodoAsDone
   end
 
   def call
-    todo = @database.find UnfinishedTask, @todo_id
+    todo = @database.find Task, @todo_id
     authorize! todo
 
     @database.update todo.done
