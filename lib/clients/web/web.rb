@@ -17,11 +17,6 @@ class TasksPage
   end
 
   class TaskPresenter < Struct.new(:task)
-    # TODO remove
-    def id
-      task.id
-    end
-
     def title
       task.title
     end
