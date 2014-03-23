@@ -14,7 +14,7 @@ class CreateTodo
   def call
     @request.validate!
 
-    t = UnfinishedTask.new
+    t = Task.new
     t.title = @request.title
     t.user = @current_user
 

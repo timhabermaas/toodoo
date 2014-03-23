@@ -54,9 +54,6 @@ class InMemoryDatabase
 
   private
     def map_for_class klass
-      if klass == UnfinishedTask || klass == CompletedTask
-        klass = Task
-      end
       @map[klass.to_s] ||= {}
     end
 end

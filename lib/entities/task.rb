@@ -21,17 +21,3 @@ class Task
     @done
   end
 end
-
-class UnfinishedTask < Task
-  def initialize attributes={}
-    super
-    @done = false
-  end
-end
-
-class CompletedTask < Task
-  def initialize attributes={}
-    super
-    @done = true
-  end
-end
