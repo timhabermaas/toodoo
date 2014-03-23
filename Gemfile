@@ -6,3 +6,6 @@ gem "slim"
 gem "virtus"
 gem "activemodel"
 gem "redis"
+
+gem "rake"
+gem "rspec"
