@@ -6,28 +6,11 @@ describe ListUnfinishedTodos do
   let(:user) { double(id: 2) }
 
   context "current user asks for his tasks" do
-    before do
-      # TODO this is actually testing the database layer. Use mocks instead?
-      t = UnfinishedTask.new
-      t.title = "Tidy up your room"
-      t.user = user
-      database.create t
-
-      t = UnfinishedTask.new
-      t.title = "Clean the dishes"
-      t.user = user
-      database.create t.done
-
-      t = UnfinishedTask.new
-      t.title = "Clean the dishes"
-      t.user = double(id: 3)
-      database.create t
-    end
-
     it "returns the unfinished todos" do
-      todos = ListUnfinishedTodos.new(database, user, 2).call
-      expect(todos.size).to eq 1
-      expect(todos.first.title).to eq "Tidy up your room"
+      tasks = double(:tasks)
+      expect(database).to receive(:query_unfinished_todos_for_user).with(2).and_return(tasks)
+      result = ListUnfinishedTodos.new(database, user, 2).call
+      expect(result).to eq tasks
     end
   end
 
