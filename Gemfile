@@ -9,7 +9,4 @@ gem "activemodel"
 gem "redis"
 
 gem "rake"
-
-group :test do
-  gem "rspec"
-end
+gem "rspec"
