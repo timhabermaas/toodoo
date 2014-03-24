@@ -26,7 +26,7 @@ The authorization rules and the use case currently live together in one class. T
 
 ####Issues
 
-I'm basically creating an [anemic domain model](http://www.martinfowler.com/bliki/AnemicDomainModel.html) since the entites have almost no business logic\*. I'm not sure that's as bad as Martin Fowler makes it sound like. The future will tell.
+I'm basically creating an [anemic domain model](http://www.martinfowler.com/bliki/AnemicDomainModel.html) since the entites have almost no business logic\*. I'm not sure that's as bad as Martin Fowler makes it sound like. [This blog post](http://blog.inf.ed.ac.uk/sapm/2014/02/04/the-anaemic-domain-model-is-no-anti-pattern-its-a-solid-design/) seems to share my opinion on the subject.
 
 \* I try to avoid breaking encapsulation by adding methods which operate on the data of the entity. For example I call `task#done` from the `MarkTodoAsDone` instead of `task.done = false`. Another way to see the Entity-UseCase relationship is to think of the entities as the functional core and the use cases as the imperative shell.
 
