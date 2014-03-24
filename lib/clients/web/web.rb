@@ -76,7 +76,8 @@ end
 
 post "/register" do
   form = RegisterUserForm.new params[:register]
-  app.register_user form
+  user = app.register_user form
+  session[:user_id] = user.id
   redirect "/tasks"
 end
 
