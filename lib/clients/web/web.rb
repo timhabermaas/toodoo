@@ -47,14 +47,15 @@ class TasksPage
   end
 end
 
+url = ENV["REDISTOGO_URL"] || "redis://localhost:6379/1"
+REDISDATABASE = RedisDatabase.new url
+
 enable :sessions
 set :session_secret, 'secret session token which needs to be replaced in production'
 
 helpers do
   def app
-    url = ENV["REDISTOGO_URL"] || "redis://localhost:6379/1"
-    database = RedisDatabase.new url
-    toodoo = Toodoo.new database
+    toodoo = Toodoo.new REDISDATABASE
 
     user_id = session[:user_id]
     if user_id
