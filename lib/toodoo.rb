@@ -37,6 +37,10 @@ class Toodoo
     @current_user = user
   end
 
+  def login_with_user_id(user_id)
+    @current_user = database.find User, user_id
+  end
+
   def mark_todo_as_done(todo_id)
     MarkTodoAsDone.new(database, current_user, todo_id).call
   end

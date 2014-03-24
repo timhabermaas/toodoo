@@ -6,10 +6,6 @@ require "toodoo"
 require "gateways/redis_database"
 require "forms"
 
-url = ENV["REDISTOGO_URL"] || "redis://localhost:6379/1"
-database = RedisDatabase.new url
-toodoo = Toodoo.new database
-
 class TasksPage
   def initialize(tasks, current_user)
     @tasks = tasks
@@ -51,6 +47,24 @@ class TasksPage
   end
 end
 
+enable :sessions
+set :session_secret, 'secret session token which needs to be replaced in production'
+
+helpers do
+  def app
+    url = ENV["REDISTOGO_URL"] || "redis://localhost:6379/1"
+    database = RedisDatabase.new url
+    toodoo = Toodoo.new database
+
+    user_id = session[:user_id]
+    if user_id
+      toodoo.login_with_user_id user_id
+    end
+
+    toodoo
+  end
+end
+
 get "/" do
   redirect "/login"
 end
@@ -61,7 +75,7 @@ end
 
 post "/register" do
   form = RegisterUserForm.new params[:register]
-  toodoo.register_user form
+  app.register_user form
   redirect "/tasks"
 end
 
@@ -72,7 +86,8 @@ end
 post "/login" do
   form = LoginForm.new params[:login]
   begin
-    toodoo.login form
+    user = app.login form
+    session[:user_id] = user.id
     redirect "/tasks"
   rescue NotAuthenticated
     slim :login, locals: { notice: "Wrong username or password." }
@@ -80,24 +95,24 @@ post "/login" do
 end
 
 get "/tasks" do
-  todos = toodoo.list_my_todos
-  tasks_page = TasksPage.new(todos, toodoo.current_user)
+  todos = app.list_my_todos
+  tasks_page = TasksPage.new(todos, app.current_user)
   slim :tasks, locals: { tasks_page: tasks_page }
 end
 
 post "/tasks" do
   form = CreateTodoForm.new params[:task]
-  toodoo.create_todo form
+  app.create_todo form
   redirect "/tasks"
 end
 
 post "/tasks/:id/delete" do
-  toodoo.archive_todo params[:id].to_i
+  app.archive_todo params[:id].to_i
   redirect "/tasks"
 end
 
 post "/tasks/:id/done" do
-  toodoo.mark_todo_as_done(params[:id].to_i)
+  app.mark_todo_as_done(params[:id].to_i)
   redirect "/tasks"
 end
 
