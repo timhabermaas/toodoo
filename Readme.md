@@ -2,6 +2,33 @@
 
 *Toodoo* is a simple application which demonstrates the [hexagonal architecture](http://alistair.cockburn.us/Hexagonal+architecture) in Ruby. This architecture decouples the application from several implementation details like the database or the delivery mechanism (e.g. the web) and makes unit testing the business logic easy and enjoyable.
 
+##Installation
+
+Install & start redis (Mac OS X)
+
+```Bash
+> brew install redis
+> redis-server /usr/local/etc/redis.conf
+```
+
+Install the dependencies
+
+```Bash
+> bundle install
+```
+
+###Web Client
+
+```Bash
+> rackup -p 8000
+```
+
+###Console Client
+
+```Bash
+> ruby -Ilib lib/clients/console/console.rb
+```
+
 ##Credits
 
 The code is heavily influenced by Robert C. Martin's [Architecture the Lost Years](https://www.youtube.com/watch?v=WpkDN78P884) talk and a series of blog posts from Adam Hawkins titled [Rediscovering the Joy of Desing](http://hawkins.io/2014/01/rediscovering-the-joy-of-design/). Thanks to both of them for their great work!
