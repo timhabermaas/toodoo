@@ -1,8 +1,10 @@
 class Task
-  attr_accessor :title, :user, :id
+  attr_accessor :title, :user, :id, :comments
 
   def initialize attributes={}
     @done = false
+    @comments = []
+
     attributes.each do |key, value|
       instance_name = "@#{key}"
       instance_variable_set instance_name.to_sym, value

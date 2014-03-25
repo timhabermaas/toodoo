@@ -14,6 +14,8 @@ class RedisDatabase
       create_task record
     when User
       create_user record
+    when Comment
+      create_comment record
     end
   end
 
@@ -22,6 +24,16 @@ class RedisDatabase
       find_task id
     elsif klass == User
       find_user id
+    elsif klass == Comment
+      find_comment id
+    else
+      raise RecordNotFound
+    end
+  end
+
+  def find_graph klass, id
+    if klass == Task
+      find_graph_task id
     else
       raise RecordNotFound
     end
@@ -56,10 +68,14 @@ class RedisDatabase
     fetch_tasks_from_keys keys
   end
 
-  def query_todos_for_user user_id
+  def query_graph_todos_for_user user_id
     keys = members_of "users:#{user_id}:tasks"
 
-    fetch_tasks_from_keys keys
+    fetch_graph_tasks_from_keys keys
+  end
+
+  def query_todos_for_user user_id
+    query_graph_todos_for_user user_id
   end
 
   private
@@ -71,6 +87,11 @@ class RedisDatabase
     def create_user user
       set_new_id user
       write_user user
+    end
+
+    def create_comment comment
+      set_new_id comment
+      write_comment comment
     end
 
     def find_user id
@@ -85,10 +106,38 @@ class RedisDatabase
       build_task_from_json json
     end
 
+    def find_comment id
+      json = @redis.get "#{key_for(Comment)}:#{id}"
+      raise RecordNotFound if json.nil?
+      build_comment_from_json json
+    end
+
+    def find_graph_task id
+      task = find_task id
+      task.comments = fetch_comments_for_task task
+      task
+    end
+
+    def fetch_comments_for_task task
+      comment_ids = @redis.lrange "tasks:#{task.id}:comments", 0, -1
+      comment_ids.map do |comment_id|
+        find_comment comment_id
+      end
+    end
+
     def fetch_tasks_from_keys keys
       keys.map do |key|
         json = @redis.get "tasks:#{key}"
         build_task_from_json json
+      end
+    end
+
+    def fetch_graph_tasks_from_keys keys
+      keys.map do |key|
+        json = @redis.get "tasks:#{key}"
+        task = build_task_from_json json
+        task.comments = fetch_comments_for_task task
+        task
       end
     end
 
@@ -101,6 +150,12 @@ class RedisDatabase
     def build_user_from_json json
       hash = JSON.parse json
       User.new hash
+    end
+
+    def build_comment_from_json json
+      hash = JSON.parse json
+      hash["author"] = find_user hash["author_id"]
+      Comment.new hash
     end
 
     def members_of key
@@ -130,6 +185,12 @@ class RedisDatabase
       @redis.set "users:names:#{user.name}", user.id
     end
 
+    def write_comment comment
+      json = {id: comment.id, content: comment.content, author_id: comment.author.id, task_id: comment.task.id}.to_json
+      @redis.set "#{key_for(Comment)}:#{comment.id}", json
+      @redis.rpush "#{key_for(Task)}:#{comment.task.id}:comments", comment.id
+    end
+
     def set_new_id record
       id = @redis.incr "#{key_for(record.class)}:last_id"
       record.id = id
@@ -138,6 +199,7 @@ class RedisDatabase
     def key_for klass
       return "users" if klass == User
       return "tasks" if klass == Task
+      return "comments" if klass == Comment
       raise "Unknown klass to serialize (tried to serialize #{klass})"
     end
 end
