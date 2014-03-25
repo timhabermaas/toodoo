@@ -24,4 +24,8 @@ class Task
   def done?
     @done
   end
+
+  def comment_size
+    comments.size
+  end
 end

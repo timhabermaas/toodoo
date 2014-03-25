@@ -54,6 +54,7 @@ def application_screen
     puts "1.) Add a new Todo"
     puts "2.) List Todos"
     puts "3.) Mark Todo as done"
+    puts "4.) Add Comment to Todo"
     puts "x.) Exit"
     answer = gets.chomp
 
@@ -76,6 +77,15 @@ def application_screen
       if id != "0"
         APP.mark_todo_as_done id.to_i
       end
+    when "4"
+      printer = TodoListPrinter.new APP.list_my_todos
+      printer.print
+
+      puts "To which task do you want to add a comment?"
+      id = gets.chomp
+      puts "What's your comment?"
+      comment = gets.chomp
+      APP.comment_on_task(id.to_i, OpenStruct.new(content: comment))
     when "x"
       break
     end

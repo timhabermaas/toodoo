@@ -5,7 +5,7 @@ class TodoListPrinter
     end
 
     def print
-      puts "[#{box_content}] #{@todo.title} (#{@todo.id})"
+      puts "[#{box_content}] #{@todo.title} (id: #{@todo.id}, comments: #{@todo.comment_size})"
     end
 
     private

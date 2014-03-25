@@ -15,12 +15,16 @@ describe CommentOnTask do
 
   context "comment valid" do
     let(:comment_form) { OpenStruct.new(content: "bla") }
+    let(:result) { subject.call }
 
-    it "adds the comment to the task" do
-      subject.call
-      task = database.find Task, @task_id
-      expect(task.comments.size).to eq 1
-      expect(task.comments.first.content).to eq "bla"
+    it "saves the comment" do
+      comment = database.find Comment, result.id
+      expect(comment.content).to eq "bla"
+    end
+
+    it "saves the author" do
+      comment = database.find Comment, result.id
+      expect(comment.author).to eq current_user
     end
   end
 
