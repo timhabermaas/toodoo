@@ -57,7 +57,12 @@ helpers do
   def app
     toodoo = Toodoo.new REDISDATABASE
 
-    user_id = session[:user_id]
+    begin
+      user_id = session[:user_id]
+    rescue RecordNotFound
+      user_id = session[:user_id] = nil
+    end
+
     if user_id
       toodoo.login_with_user_id user_id
     end
