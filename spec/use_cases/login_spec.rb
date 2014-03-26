@@ -10,7 +10,7 @@ describe Login do
     let(:login_form) { OpenStruct.new(name: "peter", password: "peter") }
 
     before do
-      @user = RegisterUser.new(database, nil, OpenStruct.new(name: "peter", password: "peter")).call
+      @user = RegisterUser.new(database, double.as_null_object, nil, OpenStruct.new(name: "peter", password: "peter")).call
     end
 
     it "can login successfully" do
@@ -23,7 +23,7 @@ describe Login do
     let(:login_form) { OpenStruct.new(name: "peter", password: "peter2") }
 
     before do
-      RegisterUser.new(database, nil, OpenStruct.new(name: "peter", password: "peter")).call
+      RegisterUser.new(database, double.as_null_object, nil, OpenStruct.new(name: "peter", password: "peter")).call
     end
 
     it "raises a NotAuthenticated exception" do

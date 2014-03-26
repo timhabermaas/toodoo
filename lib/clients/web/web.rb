@@ -4,6 +4,7 @@ require "virtus"
 
 require "toodoo"
 require "gateways/redis_database"
+require "gateways/console_print_mailer"
 require "forms"
 
 class TaskPage < Struct.new(:task)
@@ -94,7 +95,7 @@ set :session_secret, 'secret session token which needs to be replaced in product
 
 helpers do
   def app
-    toodoo = Toodoo.new REDISDATABASE
+    toodoo = Toodoo.new REDISDATABASE, ConsolePrintMailer.new
 
     begin
       user_id = session[:user_id]

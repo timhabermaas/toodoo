@@ -1,12 +1,14 @@
 require "toodoo"
 require "forms"
 require "gateways/redis_database"
+require "gateways/console_print_mailer"
 require "clients/console/todo_list_printer"
 require "clients/console/todo_details_printer"
 
 url = "redis://localhost:6379/1"
 database = RedisDatabase.new(url)
-APP = Toodoo.new(database)
+mailer = ConsolePrintMailer.new
+APP = Toodoo.new(database, mailer)
 
 def menu(*choices)
   puts "Please choose an action"

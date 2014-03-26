@@ -3,7 +3,7 @@ require "entities"
 shared_examples "a database supporting TooDoo" do
 
   describe "#create user" do
-    let(:user) { User.new(name: "name", password: "password") }
+    let(:user) { User.new(name: "name", password: "password", email: "email") }
 
     it "saves the user" do
       subject.create user

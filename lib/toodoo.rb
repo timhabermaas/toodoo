@@ -11,10 +11,11 @@ require "use_cases/comment_on_task"
 require "use_cases/login"
 
 class Toodoo
-  attr_reader :database, :current_user
+  attr_reader :database, :mailer, :current_user
 
-  def initialize(database)
+  def initialize(database, mailer)
     @database = database
+    @mailer = mailer
   end
 
   def logged_in?
@@ -30,7 +31,7 @@ class Toodoo
   end
 
   def register_user(request)
-    user = RegisterUser.new(database, current_user, request).call
+    user = RegisterUser.new(database, mailer, current_user, request).call
     @current_user = user
   end
 
