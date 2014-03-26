@@ -1,6 +1,4 @@
-require "ostruct"
-require "gateways/in_memory_database"
-require "entities"
+require "use_case_spec_helper"
 require "use_cases/register_user"
 
 describe RegisterUser do

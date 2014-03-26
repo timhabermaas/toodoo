@@ -1,4 +1,3 @@
-
 require_relative "./shared_database_examples"
 require "gateways/redis_database"
 

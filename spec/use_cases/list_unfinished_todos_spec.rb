@@ -1,5 +1,5 @@
+require "use_case_spec_helper"
 require "use_cases/list_unfinished_todos"
-require "gateways/in_memory_database"
 
 describe ListUnfinishedTodos do
   let(:database) { InMemoryDatabase.new }

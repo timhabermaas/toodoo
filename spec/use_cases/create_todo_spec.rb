@@ -1,6 +1,5 @@
+require "use_case_spec_helper"
 require "use_cases/create_todo"
-require "entities/task"
-require "gateways/in_memory_database"
 
 describe CreateTodo do
   let(:database) { InMemoryDatabase.new }

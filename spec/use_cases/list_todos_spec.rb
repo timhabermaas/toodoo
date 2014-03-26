@@ -1,6 +1,5 @@
-require "gateways/in_memory_database"
+require "use_case_spec_helper"
 require "use_cases/list_todos"
-require "entities/task"
 
 describe ListTodos do
   let(:database) { InMemoryDatabase.new }

@@ -1,6 +1,4 @@
-require "gateways/in_memory_database"
-require "entities/task"
-require "entities/user"
+require "use_case_spec_helper"
 require "use_cases/show_task"
 
 describe ShowTask do

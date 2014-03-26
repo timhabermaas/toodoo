@@ -1,4 +1,4 @@
-require "gateways/in_memory_database"
+require "use_case_spec_helper"
 require "use_cases/mark_todo_as_done"
 
 describe MarkTodoAsDone do

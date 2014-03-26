@@ -1,5 +1,4 @@
-require "gateways/in_memory_database"
-require "ostruct"
+require "use_case_spec_helper"
 require "use_cases/comment_on_task"
 
 describe CommentOnTask do

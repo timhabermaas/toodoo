@@ -1,7 +1,6 @@
-require "ostruct"
+require "use_case_spec_helper"
 require "use_cases/login"
 require "use_cases/register_user"
-require "gateways/in_memory_database"
 
 describe Login do
   let(:database) { InMemoryDatabase.new }
