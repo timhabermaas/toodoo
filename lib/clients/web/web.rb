@@ -6,32 +6,67 @@ require "toodoo"
 require "gateways/redis_database"
 require "forms"
 
+class TaskPage < Struct.new(:task)
+  def task_title
+    task_presenter.title
+  end
+
+  def comments
+    task.comments.map do |c|
+      CommentPresenter.new(c)
+    end
+  end
+
+  def comments_post_path
+    "/tasks/#{task.id}/comments"
+  end
+
+  private
+    def task_presenter
+      @task_presenter ||= TaskPresenter.new(task)
+    end
+end
+
+class CommentPresenter < Struct.new(:comment)
+  def author_name
+    comment.author.name
+  end
+
+  def content
+    comment.content
+  end
+end
+
+class TaskPresenter < Struct.new(:task)
+  def title
+    task.title
+  end
+
+  def marked_symbol
+    task.done? ? "[x]" : "[ ]"
+  end
+
+  def show_path
+    "/tasks/#{task.id}"
+  end
+
+  def mark_as_done_path
+    "/tasks/#{task.id}/done"
+  end
+
+  def delete_path
+    "/tasks/#{task.id}/delete"
+  end
+
+  def show_mark_button?
+    !task.done?
+  end
+end
+
 class TasksPage
   def initialize(tasks, current_user)
     @tasks = tasks
     @current_user = current_user
-  end
-
-  class TaskPresenter < Struct.new(:task)
-    def title
-      task.title
-    end
-
-    def marked_symbol
-      task.done? ? "[x]" : "[ ]"
-    end
-
-    def mark_as_done_path
-      "/tasks/#{task.id}/done"
-    end
-
-    def delete_path
-      "/tasks/#{task.id}/delete"
-    end
-
-    def show_mark_button?
-      !task.done?
-    end
   end
 
   def tasks
@@ -107,6 +142,12 @@ get "/tasks" do
   slim :tasks, locals: { tasks_page: tasks_page }
 end
 
+get "/tasks/:id" do
+  task = app.show_task params[:id].to_i
+  page = TaskPage.new(task)
+  slim :task, locals: { page: page }
+end
+
 post "/tasks" do
   form = CreateTodoForm.new params[:task]
   app.create_todo form
@@ -121,6 +162,12 @@ end
 post "/tasks/:id/done" do
   app.mark_todo_as_done(params[:id].to_i)
   redirect "/tasks"
+end
+
+post "/tasks/:task_id/comments" do
+  form = OpenStruct.new(content: params[:comment][:content])
+  app.comment_on_task(params[:task_id].to_i, form)
+  redirect "/tasks/#{params[:task_id]}"
 end
 
 get "/new_task" do
