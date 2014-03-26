@@ -1,4 +1,5 @@
 require "gateways/errors"
+require "entities"
 
 class InMemoryDatabase
   def initialize
@@ -12,6 +13,9 @@ class InMemoryDatabase
         raise NotUnique
       rescue RecordNotFound
       end
+    end
+    if record.class == Comment
+      record.task.comments << record
     end
     id = rand 20000
     record.id = id
@@ -30,6 +34,10 @@ class InMemoryDatabase
     raise RecordNotFound
   end
 
+  def find_graph(klass, id)
+    find klass, id
+  end
+
   def delete(record)
     map_for_class(record.class).delete record.id
   end
@@ -44,7 +52,7 @@ class InMemoryDatabase
     user
   end
 
-  def query_todos_for_user(user_id)
+  def query_graph_todos_for_user(user_id)
     all(Task).select { |t| t.user.id == user_id }
   end
 

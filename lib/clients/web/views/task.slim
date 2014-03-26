@@ -1,0 +1,16 @@
+h1= page.task_title
+
+ol
+  - page.comments.each do |comment|
+    li
+      strong= comment.author_name
+      =< comment.content
+
+h3 New comment
+
+form action=page.comments_post_path method="post"
+  p
+    label for="content"
+    input type="text" name="comment[content]" id="content"
+  p
+    input type="submit" value="Add comment"
