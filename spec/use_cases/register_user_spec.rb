@@ -3,7 +3,7 @@ require "use_cases/register_user"
 
 describe RegisterUser do
   let(:database) { InMemoryDatabase.new }
-  let(:mailer) { double(:mailer).as_null_object }
+  let(:mailer) { InMemoryMailer.new }
 
   subject { RegisterUser.new(database, mailer, nil, user_form) }
 
@@ -21,7 +21,8 @@ describe RegisterUser do
     end
 
     it "sends the user an email" do
-      expect(mailer).to have_received(:send_registration_mail).with("foo@bar.com")
+      expect(mailer.mails.size).to eq 1
+      expect(mailer.mails.first.to).to eq "foo@bar.com"
     end
   end
 
