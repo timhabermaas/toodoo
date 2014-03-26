@@ -2,6 +2,7 @@ require "toodoo"
 require "forms"
 require "gateways/redis_database"
 require "clients/console/todo_list_printer"
+require "clients/console/todo_details_printer"
 
 url = "redis://localhost:6379/1"
 database = RedisDatabase.new(url)
@@ -55,6 +56,7 @@ def application_screen
     puts "2.) List Todos"
     puts "3.) Mark Todo as done"
     puts "4.) Add Comment to Todo"
+    puts "5.) Show details of Todo"
     puts "x.) Exit"
     answer = gets.chomp
 
@@ -86,6 +88,16 @@ def application_screen
       puts "What's your comment?"
       comment = gets.chomp
       APP.comment_on_task(id.to_i, OpenStruct.new(content: comment))
+    when "5"
+      printer = TodoListPrinter.new APP.list_my_todos
+      printer.print
+
+      puts "Enter the id of the task"
+      id = gets.chomp
+      task = APP.show_task(id.to_i)
+      puts
+      TodoDetailsPrinter.new(task).print
+      puts
     when "x"
       break
     end
