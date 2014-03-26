@@ -46,6 +46,10 @@ class TaskPresenter < Struct.new(:task)
     task.done? ? "[x]" : "[ ]"
   end
 
+  def comments_count
+    "#{task.comment_size} Comments"
+  end
+
   def show_path
     "/tasks/#{task.id}"
   end

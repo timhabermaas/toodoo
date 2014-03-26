@@ -8,8 +8,9 @@ ul
   - tasks_page.tasks.each do |task|
     li
       = task.marked_symbol
-      a href=task.show_path
+      a> href=task.show_path
         = task.title
+      small= task.comments_count
       - if task.show_mark_button?
         form action="#{task.mark_as_done_path}" method="post"
           input type="submit" value="Mark as done"
