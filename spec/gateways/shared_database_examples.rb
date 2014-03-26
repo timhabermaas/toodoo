@@ -7,7 +7,10 @@ shared_examples "a database supporting TooDoo" do
 
     it "saves the user" do
       subject.create user
-      expect(subject.find(User, user.id)).to eq user
+      found_user = subject.find(User, user.id)
+      expect(found_user.name).to eq "name"
+      expect(found_user.password).to eq "password"
+      expect(found_user.email).to eq "email"
     end
 
     context "username already exists" do
@@ -30,7 +33,9 @@ shared_examples "a database supporting TooDoo" do
     describe "#create" do
       it "creates the todo" do
         subject.create task
-        expect(subject.find Task, task.id).to eq task
+        created_task = subject.find Task, task.id
+        expect(created_task.title).to eq "title"
+        expect(created_task.done?).to eq false
       end
     end
 
@@ -101,7 +106,8 @@ shared_examples "a database supporting TooDoo" do
       end
 
       it "saves the comment" do
-        expect(subject.find(Comment, comment.id)).to eq comment
+        created_comment = subject.find(Comment, comment.id)
+        expect(created_comment.content).to eq "bla"
       end
 
       it "retreives the author" do
