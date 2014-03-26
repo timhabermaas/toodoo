@@ -5,6 +5,7 @@ require "virtus"
 require "toodoo"
 require "gateways/redis_database"
 require "gateways/console_print_mailer"
+require "gateways/sendgrid_mailer"
 require "forms"
 
 class TaskPage < Struct.new(:task)
@@ -89,13 +90,18 @@ end
 
 url = ENV["REDISTOGO_URL"] || "redis://localhost:6379/1"
 REDISDATABASE = RedisDatabase.new url
+MAILER = if ENV["SENDGRID_PASSWORD"] && ENV["SENDGRID_PASSWORD"]
+  SendgridMailer.new ENV["SENDGRID_USERNAME"], ENV["SENDGRID_PASSWORD"]
+else
+  ConsolePrintMailer.new
+end
 
 enable :sessions
 set :session_secret, 'secret session token which needs to be replaced in production'
 
 helpers do
   def app
-    toodoo = Toodoo.new REDISDATABASE, ConsolePrintMailer.new
+    toodoo = Toodoo.new REDISDATABASE, MAILER
 
     begin
       user_id = session[:user_id]
