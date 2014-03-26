@@ -103,14 +103,14 @@ helpers do
   def app
     toodoo = Toodoo.new REDISDATABASE, MAILER
 
-    begin
-      user_id = session[:user_id]
-    rescue RecordNotFound
-      user_id = session[:user_id] = nil
-    end
+    user_id = session[:user_id]
 
     if user_id
-      toodoo.login_with_user_id user_id
+      begin
+        toodoo.login_with_user_id user_id
+      rescue RecordNotFound
+        session[:user_id] = nil
+      end
     end
 
     toodoo
