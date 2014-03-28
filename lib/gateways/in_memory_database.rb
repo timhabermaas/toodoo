@@ -60,6 +60,10 @@ class InMemoryDatabase
     all(Task).select { |t| t.user.id == user_id && !t.done? }
   end
 
+  def flush
+    @map = {}
+  end
+
   private
     def map_for_class klass
       @map[klass.to_s] ||= {}

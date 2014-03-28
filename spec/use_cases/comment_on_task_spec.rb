@@ -8,7 +8,6 @@ describe CommentOnTask do
     @task_id = t.id
   end
 
-  let(:database) { InMemoryDatabase.new }
   let(:current_user) { double(id: 1) }
   subject { CommentOnTask.new(database, current_user, @task_id, comment_form) }
 

@@ -2,7 +2,6 @@ require "use_case_spec_helper"
 require "use_cases/register_user"
 
 describe RegisterUser do
-  let(:database) { InMemoryDatabase.new }
   let(:mailer) { InMemoryMailer.new }
 
   subject { RegisterUser.new(database, mailer, nil, user_form) }
