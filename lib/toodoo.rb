@@ -49,7 +49,7 @@ class Toodoo
   end
 
   def comment_on_task(task_id, request)
-    CommentOnTask.new(database, current_user, task_id, request).call
+    CommentOnTask.new(database, mailer, current_user, task_id, request).call
   end
 
   def list_todos(user_id)
