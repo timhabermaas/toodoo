@@ -2,13 +2,15 @@ require "use_case_spec_helper"
 require "use_cases/comment_on_task"
 
 describe CommentOnTask do
+  let(:current_user) { User.new(name: "user") }
+
   before do
+    database.create current_user
     t = Task.new(title: "Some task")
     database.create t
     @task_id = t.id
   end
 
-  let(:current_user) { double(id: 1) }
   let(:mailer) { double.as_null_object }
   subject { CommentOnTask.new(database, mailer, current_user, @task_id, comment_form) }
 
@@ -47,6 +49,24 @@ describe CommentOnTask do
 
     it "adds the mentioned users as followers to the task at hand" do
       expect(database.find(Task, @task_id).followers).to include(peter, dieter)
+    end
+  end
+
+  context "mentioning himself" do
+    let(:comment_form) { OpenStruct.new(content: "I'm mentioning me: @user") }
+
+    it "doesn't send an email" do
+      subject.call
+      expect(mailer).to_not have_received(:send_mention_in_comment_mail)
+    end
+  end
+
+  context "mentioning someone who doesn't exist" do
+    let(:comment_form) { OpenStruct.new(content: "@randomuser") }
+
+    it "doesn't send an email" do
+      subject.call
+      expect(mailer).to_not have_received(:send_mention_in_comment_mail)
     end
   end
 

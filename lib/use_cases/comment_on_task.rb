@@ -8,9 +8,12 @@ class CommentOnTask < Struct.new(:database, :mailer, :current_user, :task_id, :c
     task = database.find Task, task_id
 
     usernames = find_mentioned_usernames comment_form.content
-    mentions = usernames.map do |n|
-      database.query_user_by_name n
-    end
+    mentions = (usernames - [current_user.name]).map do |n|
+      begin
+        database.query_user_by_name n
+      rescue RecordNotFound
+      end
+    end.compact
 
     comment = Comment.new(task: task, content: comment_form.content, author: current_user)
 
