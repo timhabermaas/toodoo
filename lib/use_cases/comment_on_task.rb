@@ -7,41 +7,42 @@ class CommentOnTask < Struct.new(:database, :mailer, :current_user, :task_id, :c
 
     task = database.find Task, task_id
     comment = Comment.new(task: task, content: comment_form.content, author: current_user)
+    database.create comment
 
     take_care_of_mentioned_users_in comment
 
-    database.create comment
     comment
   end
 
   private
     def take_care_of_mentioned_users_in comment
-      usernames = find_mentioned_usernames comment.content
-      mentioned_users = fetch_users_for_names usernames
-      mention_users mentioned_users, comment
+      mentioned_users = mentioned_users_in comment
+      email_users mentioned_users, comment
+      make_users_followers mentioned_users, comment.task
     end
 
-    def find_mentioned_usernames text
-      text.scan(/@[a-zA-Z]+/).map { |n| n[1..-1] }
+    def email_users users, comment
+      users.each { |u| mailer.send_mention_in_comment_mail u, comment }
+    end
+
+    def make_users_followers users, task
+      users.each { |u| task.add_follower u }
+    end
+
+    def mentioned_users_in comment
+      fetch_users_for_names usernames_in_comment(comment)
+    end
+
+    def usernames_in_comment comment
+      comment.content.scan(/@[a-zA-Z]+/).map { |n| n[1..-1] }
     end
 
     def fetch_users_for_names names
-      mentions = (names - [current_user.name]).map do |n|
+      (names - [current_user.name]).map do |n|
         begin
           database.query_user_by_name n
         rescue RecordNotFound
         end
       end.compact
-    end
-
-    def mention_users users, comment
-      users.each do |m|
-        mention_user_in_comment m, comment
-      end
-    end
-
-    def mention_user_in_comment user, comment
-      mailer.send_mention_in_comment_mail user, comment
-      comment.task.add_follower user
     end
 end
