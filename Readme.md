@@ -1,4 +1,4 @@
-#Toodoo [![Build Status](https://travis-ci.org/timhabermaas/toodoo.svg?branch=travis-ci)](https://travis-ci.org/timhabermaas/toodoo)
+#Toodoo [![Build Status](https://travis-ci.org/timhabermaas/toodoo.svg?branch=travis-ci)](https://travis-ci.org/timhabermaas/toodoo) [![Code Climate](https://codeclimate.com/github/timhabermaas/toodoo.png)](https://codeclimate.com/github/timhabermaas/toodoo)
 
 *Toodoo* is a simple application which demonstrates the [hexagonal architecture](http://alistair.cockburn.us/Hexagonal+architecture) in Ruby. This architecture decouples the application from several implementation details like the database or the delivery mechanism (e.g. the web) and makes unit testing the business logic easy and enjoyable.
 
