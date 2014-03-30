@@ -161,8 +161,12 @@ end
 
 post "/tasks" do
   form = CreateTodoForm.new params[:task]
-  app.create_todo form
-  redirect "/tasks"
+  begin
+    app.create_todo form
+    redirect "/tasks"
+  rescue ValidationError => e
+    slim :new_task, locals: { task: form }
+  end
 end
 
 post "/tasks/:id/delete" do
@@ -182,5 +186,6 @@ post "/tasks/:task_id/comments" do
 end
 
 get "/new_task" do
-  slim :new_task
+  form = CreateTodoForm.new
+  slim :new_task, locals: { task: form }
 end

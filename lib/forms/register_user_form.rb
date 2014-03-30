@@ -1,3 +1,5 @@
+require "virtus"
+
 class RegisterUserForm
   include Virtus.model
 

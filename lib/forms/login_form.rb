@@ -1,3 +1,5 @@
+require "virtus"
+
 class LoginForm
   include Virtus.model
 

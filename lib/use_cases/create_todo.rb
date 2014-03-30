@@ -2,8 +2,6 @@ require "virtus"
 require "active_model"
 require "entities/task"
 
-ValidationError = Class.new StandardError
-
 class CreateTodo
   def initialize(database, current_user, request)
     @database = database
