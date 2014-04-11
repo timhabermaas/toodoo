@@ -24,9 +24,11 @@ shared_examples "a database supporting TooDoo" do
   describe "tasks" do
     let(:task) { Task.new(title: "title", done: false) }
     let(:user) { User.new(name: "name") }
+    let(:other_user) { User.new(name: "other user") }
 
     before do
       subject.create user
+      subject.create other_user
       task.user = user
     end
 
@@ -76,6 +78,7 @@ shared_examples "a database supporting TooDoo" do
 
     describe "#find_graph" do
       before do
+        task.add_follower other_user
         subject.create task
         @comment_1 = Comment.new(content: "bla 1", task: task, author: user)
         subject.create @comment_1
@@ -85,6 +88,10 @@ shared_examples "a database supporting TooDoo" do
 
       it "fetches the comments" do
         expect(subject.find_graph(Task, task.id).comments).to eq [@comment_1, @comment_2]
+      end
+
+      it "fetches the followers" do
+        expect(subject.find_graph(Task, task.id).followers).to eq [other_user]
       end
     end
   end

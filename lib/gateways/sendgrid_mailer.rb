@@ -19,4 +19,8 @@ class SendgridMailer
   def send_registration_mail email
     Pony.mail(to: email, from: "info@toodoo.com", subject: "Registration at toodoo.com", body: "Welcome!")
   end
+
+  def send_mention_in_comment_mail(user, comment)
+    Pony.mail(to: user.email, from: "info@toodoo.com", subject: "You've been mentioned", body: "He wrote: #{comment.content}")
+  end
 end

@@ -1,9 +1,10 @@
 class Task
-  attr_accessor :title, :user, :id, :comments
+  attr_accessor :title, :user, :id, :comments, :followers
 
   def initialize attributes={}
     @done = false
     @comments = []
+    @followers = []
 
     attributes.each do |key, value|
       instance_name = "@#{key}"
@@ -27,5 +28,9 @@ class Task
 
   def comment_size
     comments.size
+  end
+
+  def add_follower user
+    @followers << user
   end
 end

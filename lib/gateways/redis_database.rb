@@ -115,6 +115,7 @@ class RedisDatabase
     def find_graph_task id
       task = find_task id
       task.comments = fetch_comments_for_task task
+      task.followers = fetch_followers_for_task task
       task
     end
 
@@ -122,6 +123,13 @@ class RedisDatabase
       comment_ids = @redis.lrange "tasks:#{task.id}:comments", 0, -1
       comment_ids.map do |comment_id|
         find_comment comment_id
+      end
+    end
+
+    def fetch_followers_for_task task
+      follower_ids = @redis.smembers "tasks:#{task.id}:followers"
+      follower_ids.map do |user_id|
+        find_user user_id
       end
     end
 
@@ -173,6 +181,8 @@ class RedisDatabase
       json = {id: task.id, title: task.title, user_id: task.user.id, done: task.done?}.to_json
       @redis.set "#{key_for(Task)}:#{task.id}", json
       @redis.sadd "users:#{task.user.id}:tasks", task.id
+      # TODO put array directly into `sadd`.
+      task.followers.each { |u| @redis.sadd "tasks:#{task.id}:followers", u.id }
       @redis.sadd "users:#{task.user.id}:tasks:unfinished", task.id if !task.done?
       @redis.srem "users:#{task.user.id}:tasks:unfinished", task.id if task.done?
     end
